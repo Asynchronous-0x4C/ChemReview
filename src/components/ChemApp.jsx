@@ -21,18 +21,21 @@ const CATEGORIES = [
     id: 'inorganic',
     name: '無機化学',
     subcategories: [
-      { id: 'halogens', name: 'ハロゲン' },
-      { id: 'transition_metals', name: '遷移元素' },
-      { id: 'complex_ions', name: '錯イオン' }
+      { id: 'non_metals', name: '非金属' },
+      { id: 'transition_metals', name: '遷移金属' },
+      { id: 'typical_metals', name: '典型金属' }
     ]
   },
   {
     id: 'theoretical',
     name: '理論化学',
     subcategories: [
-      { id: 'acid_base', name: '酸と塩基' },
+      { id: 'materials', name: '物質' },
+      { id: 'equilibrium', name: '化学平衡' },
       { id: 'thermochem', name: '熱化学' },
-      { id: 'equilibrium', name: '化学平衡' }
+      { id: 'solution', name: '溶液' },
+      { id: 'acid_base', name: '酸と塩基' },
+      { id: 'redox', name: '酸化還元' }
     ]
   },
   {
@@ -49,7 +52,7 @@ const CATEGORIES = [
 // 2. 軽量インデックス (Simulated Search Index)
 // 検索時はこの軽量配列のみをスキャンする
 const QUESTION_INDEX = [
-  { id: 101, cat: 'inorganic', sub: 'halogens', difficulty: 1 },
+  { id: 101, cat: 'inorganic', sub: 'non_metals', difficulty: 1 },
   { id: 201, cat: 'theoretical', sub: 'acid_base', difficulty: 2 },
   { id: 202, cat: 'theoretical', sub: 'thermochem', difficulty: 2 },
   { id: 301, cat: 'organic', sub: 'aliphatic', difficulty: 3 },

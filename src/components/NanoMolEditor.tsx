@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Eraser, Trash2, Undo, Redo, Share2, Atom, MousePointer2, Move, Lock } from 'lucide-react';
+import initRDKit from "../libs/RDKit_minimal";
+import type { RDKitModule } from '@rdkit/rdkit';
 
 /**
  * NanoMolEditor
@@ -10,6 +12,12 @@ import { Eraser, Trash2, Undo, Redo, Share2, Atom, MousePointer2, Move, Lock } f
  */
 
 // --- Constants & Types ---
+
+declare global {
+    interface Window {
+        RDKit: RDKitModule
+    }
+}
 
 const BOND_SNAP_DIST = 20; // Distance to snap to existing atoms
 const ELEMENT_COLORS = {
@@ -189,7 +197,8 @@ export const generateSmiles = (atoms: AtomData[], bonds: BondData[]): string => 
       smilesParts.push(dfs(atom.id, null));
     }
   });
-  return smilesParts.join('.');
+
+  return /*window.RDKit?.get_mol(smilesParts.join('.'))?.get_smiles()??*/smilesParts.join('.');
 };
 
 // --- Component ---
@@ -220,6 +229,8 @@ export default function NanoMolEditor({ value, onChange, isReadOnly = false }: N
   // Panning State
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState<{ x: number; y: number } | null>(null); // Screen coords
+
+  const [LoadingRDKit, setLoadingRDKit] = useState(false);
 
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -252,6 +263,22 @@ export default function NanoMolEditor({ value, onChange, isReadOnly = false }: N
         }
       }
     }
+
+    // if(!window.RDKit&&!LoadingRDKit){
+    //   setLoadingRDKit(true);
+    //   initRDKit({locateFile:()=>'./libs/RDKit_minimal.wasm'}).then(
+    //     ((RDKit:RDKitModule) =>{
+    //       setLoadingRDKit(false);
+    //       console.log("RDKit version: " + RDKit.version());
+    //       window.RDKit=RDKit;
+    //       return RDKit;
+    //     }
+    //   ) as any).catch(
+    //     (r)=>{
+    //       console.error(r);
+    //     }
+    //   );
+    // }
   }, [value]); // Depend on value
 
   // --- State Change Notification ---
